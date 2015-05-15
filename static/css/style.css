@@ -1,0 +1,7 @@
+.navbar-logo {
+    background: url("../logo.png");
+    height: 51px;
+    width: 194px;
+    margin-top: 30px;
+    float: left;
+}
