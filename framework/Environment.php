@@ -6,8 +6,11 @@
  * Time: 15:29
  */
 
+//namespace sft;
+
+
 class Environment {
     public static function get()    {
-        return (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : "development");
+        return (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : "dev");
     }
 }

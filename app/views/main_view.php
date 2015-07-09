@@ -22,10 +22,6 @@ include('partials/header.php');?>
             <?php print $content;?>
         </div>
 
-        <hr>
-
-  <div class="products">
-  <?php print_r($products);?>
-  </div>
+        <hr>  111
 
 <?php include('partials/footer.php'); ?>

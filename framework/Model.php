@@ -6,13 +6,14 @@
  * Date: 24.02.2015
  * Time: 14:05
  */
-class Model extends Singleton {
+class Model
+{
 
   private $db;
   public $variables;
 
   public function __construct($data = array()) {
-    $this->db = new DB();
+    $this->db = new Db();
     $this->variables = $data;
   }
 

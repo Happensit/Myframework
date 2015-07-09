@@ -7,14 +7,20 @@
  * Time: 15:28
  */
 
-class Config extends Singleton {
+//namespace sft;
+
+
+class Config
+{
 
     private static $config;
 
-    public static function get($key) {
+    public static function get($key)
+    {
         if (!self::$config) {
-            self::$config = require(ROOT_DIR .'app/config/' . Environment::get() . '.php');
+            self::$config = require(ROOT_DIR.'app/config/'.Environment::get().'.php');
         }
+
         return self::$config[$key];
     }
 }

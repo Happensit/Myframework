@@ -8,10 +8,10 @@
 
 error_reporting(0);
 
-return array(
+return [
   'URL' => 'http://' . $_SERVER['HTTP_HOST'] . str_replace('public', '', dirname($_SERVER['SCRIPT_NAME'])) .'/',
   'AppName' => 'Sft-framework',
-  'DefaultController' => 'main',
+  'DefaultController' => 'Main',
   'DefaultAction' => 'index',
   'ErrorController' => 'error',
 
@@ -25,4 +25,4 @@ return array(
   'DbCharset' => 'utf8',
   'DbPrefix' => 'sh_',
 
-);
+];

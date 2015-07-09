@@ -5,3 +5,7 @@
     margin-top: 30px;
     float: left;
 }
+
+body > .container {
+    padding-top: 60px;
+}

@@ -6,70 +6,97 @@
  * Date: 24.02.2015
  * Time: 14:12
  */
-class Sft {
 
-  /**
-   * @const string
-   */
+//namespace sft;
 
-  public static function getVersion() {
-    return '0.0.1';
-  }
+class Sft
+{
 
-  public static function powered() {
-    return '';
-  }
+    protected static $instance;
 
+    /**
+     * @return Singleton
+     */
+    final public static function getInstance()	 // Возвращает единственный экземпляр класса. @return Singleton
+    {
+        static $instance = null;
 
-  public function __construct() {
-    // Set our defaults
-    $controller = Config::get('DefaultController');
-    $action = 'index';
-    $url = '';
-    // Get request url and script url
-    $request_url = $this->getUri();
-    $script_url = (isset($_SERVER['PHP_SELF'])) ? $_SERVER['PHP_SELF'] : '';
-    // Get our url path and trim the / of the left and the right
-    if ($request_url != $script_url) {
-      $url = trim(preg_replace('/' . str_replace('/', '\/', str_replace('index.php', '', $script_url)) . '/', '', $request_url, 1), '/');
+        if (null === $instance) {
+            $instance = new static();
+        }
+
+        return $instance;
     }
-    // Split the url into segments
-    $segments = explode('/', $url);
-    // Do our default checks
-    if (isset($segments[0]) && $segments[0] != '') {
-      $controller = $segments[0];
+
+    final protected function __clone() {} // Защищаем от создания через клонирование
+    protected function __wakeup() {}
+
+    public function __construct()
+    {
+        $controllerName = Config::get('DefaultController');
+        $actionName = 'index';
+        $params = array();
+        $routeArr = explode('/', $_SERVER['REQUEST_URI']);
+
+        if (!empty($routeArr[1])) {
+            $controllerName = ucfirst($routeArr[1]);
+        }
+        if (!empty($routeArr[2])) {
+            $end = strpos($routeArr[2], '?');
+            if ($end > 0) {
+                $actionName = substr($routeArr[2], 0, $end);
+            } else {
+                $actionName = $routeArr[2];
+            }
+        }
+        if (count($routeArr) > 3) { //Если кроме "/контроллера/экшна" в пути есть что-то еще - передаём в массив параметров
+            for ($i = 3; $i < count($routeArr); $i++) {
+                $end = strpos($routeArr[$i], '?');
+                if ($end > 0) {
+                    $params[] = substr($routeArr[$i], 0, $end);
+                } else {
+                    $params[] = $routeArr[$i];
+                }
+            }
+        }
+        if (!empty($_REQUEST)) {
+            foreach ($_REQUEST as $key => $value) {
+                $params[$key] = $value;
+            }
+        }
+
+        // Get our controller file
+        $path = APP_DIR . 'controllers/' . $controllerName . 'Controller.php';
+        if (file_exists($path)) {
+            include_once($path);
+        }
+        else {
+            $controllerName = Config::get('ErrorController');
+            include_once(APP_DIR . 'controllers/' . $controllerName . 'Controller.php');
+        }
+
+        // Check the action exists
+        if (!method_exists($controllerName .'Controller', "action".$actionName)) {
+            $controllerName = Config::get('ErrorController');
+            include_once(APP_DIR . 'controllers/' . $controllerName . 'Controller.php');
+            $actionName = 'Index';
+        }
+
+        $controllerName = $controllerName .'Controller';
+        $controller = new $controllerName;
+        $action = "action".$actionName;
+        $controller->$action($params);
+
     }
-    if (isset($segments[1]) && $segments[1] != '') {
-      $action = $segments[1];
-    }
-    // Get our controller file
-    $path = APP_DIR . 'controllers/' . $controller . '.php';
-    if (file_exists($path)) {
-      include_once($path);
-    }
-    else {
-      $controller = Config::get('ErrorController');
-      include_once(APP_DIR . 'controllers/' . $controller . '.php');
-    }
-    // Check the action exists
-    if (!method_exists($controller, $action)) {
-      $controller = Config::get('ErrorController');
-      include_once(APP_DIR . 'controllers/' . $controller . '.php');
-      $action = 'index';
-    }
-    // Create object and call method
-    $obj = $controller::getInstance();
-    die(call_user_func_array(array($obj, $action), array_slice($segments, 2)));
-  }
 
 
-  /**
-   * Вовзращает  URI, с get параметров.
-   * @return type
-   */
-  public static function getUri() {
-    return isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-  }
+    public static function getVersion()
+    {
+        return '0.0.1';
+    }
 
+    public static function route()
+    {
 
+    }
 }

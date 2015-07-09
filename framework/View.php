@@ -14,7 +14,7 @@ class View {
 
     public function __construct($template) {
 		$this->template = APP_DIR .'views/'. $template .'.php';
-        $this->cache_folder = ROOT_DIR . 'static/caching' . md5 ($template) . '.php';
+        //$this->cache_folder = ROOT_DIR . 'static/caching' . md5 ($template) . '.php';
 	}
 
     public function set($var, $val = '') {
@@ -26,27 +26,26 @@ class View {
     }
 
     public function add_css($file){
-        $file = '<link rel="stylesheet" href="'.$file.'" media="all" />'."\n";
+        $file = '<link rel="stylesheet" href="'.$file.'" media="all" />'."\r\n";
         $this->data('css', $file);
     }
 
     public function add_js($file){
-        $file = '<script src="'.$file.'"></script>'."\n";
+        $file = '<script src="'.$file.'"></script>'."\r\n";
         $this->data( 'js', $file );
     }
 
     public function meta($meta='', $val=''){
-        $meta = '<meta name="'.$meta.'" content="'.$val.'" />'."\n";
+        $meta = '<meta name="'.$meta.'" content="'.$val.'" />'."\r\n";
         $this->data('meta', $meta);
     }
 
     public function render() {
-       // $start = microtime(true);
-       // $cache = new Cache();
-       // $key = md5(reset($this->pageVars));
-        $data = ''; //$cache->get($key);
-
-
+        $start = microtime(true);
+//        $cache = new Cache();
+//        $key = md5(reset($this->pageVars));
+//        $data = $cache->get($key);
+        $data = '';
 
         if(empty($data)){
             extract($this->pageVars);
@@ -55,12 +54,17 @@ class View {
             ob_start();
             include($this->template);
             $data = ob_get_clean();
+
             //$cache->add($key, $data, 0, 360);
         }
 
-        echo $data;
-       // $time = microtime(true) - $start;
-       // printf('Скрипт выполнялся %.4F сек.', $time);
+        $time = microtime(true) - $start;
+        //$data .= "<!--Скрипт выполнялся за " . $time .'-->';
+        $data .= "Скрипт выполнялся за " . $time .'';
+
+        //$cache->flush();
+
+        print $data;
     }
 
 

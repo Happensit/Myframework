@@ -5,6 +5,8 @@
  * Date: 24.02.2015
  * Time: 14:33
  */
+
+define('BASE_URL', '/');
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -15,13 +17,12 @@
     <title>Welcome to <?php echo Config::get('AppName'); ?></title>
     <?php print $meta; // Установка значений в метатеги title, keywords, description.?>
     <?php print $css; ?>
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/style.css" type="text/css" media="screen" />
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="<?php echo BASE_URL; ?>"><?php echo Config::get('AppName'); ?></a>
+      <a class="navbar-brand" href="<?php echo Config::get('AppName'); ?>"></a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">

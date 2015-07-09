@@ -13,7 +13,7 @@ class Cache {
 	/**
 	 * Directory to use for cache.
 	 */
-	public $dir = 'static/cache';
+	public $dir = 'assets/cache';
 	/**
 	 * Constructor method creates the directory if it's missing.
 	 */
@@ -55,9 +55,7 @@ class Cache {
 		return false;
 	}
 
-	/**
-	 * Emulates `MemcacheExt::cache`.
-	 */
+
 	public function cache ($key, $timeout, $function) {
 		if (($val = $this->get ($key)) === false) {
 			$val = $function ();
@@ -65,9 +63,7 @@ class Cache {
 		}
 		return $val;
 	}
-	/**
-	 * Emulates `Memcache::get`.
-	 */
+
 	public function get ($key) {
 		if (file_exists ($this->dir . '/' . md5 ($key))) {
 			if ($this->_has_timed_out ($key)) {
@@ -81,9 +77,7 @@ class Cache {
 		}
 		return false;
 	}
-	/**
-	 * Emulates `Memcache::add`.
-	 */
+
 	public function add ($key, $val, $flags = 0, $timeout = false) {
 		if (is_array ($val) || is_object ($val)) {
 			$val = serialize ($val);
@@ -100,9 +94,7 @@ class Cache {
 		}
 		return true;
 	}
-	/**
-	 * Emulates `Memcache::replace`.
-	 */
+
 	public function replace ($key, $val, $flags = 0, $timeout = false) {
 		if (is_array ($val) || is_object ($val)) {
 			$val = serialize ($val);
@@ -116,9 +108,7 @@ class Cache {
 		}
 		return true;
 	}
-	/**
-	 * Emulates `Memcache::set`.
-	 */
+
 	public function set ($key, $val, $flags = 0, $timeout = false) {
 		if (is_array ($val) || is_object ($val)) {
 			$val = serialize ($val);
@@ -132,9 +122,7 @@ class Cache {
 		}
 		return true;
 	}
-	/**
-	 * Emulates `Memcache::increment`.
-	 */
+
 	public function increment ($key, $value = 1) {
 		if (file_exists ($this->dir . '/' . md5 ($key))) {
 			$val = file_get_contents ($this->dir . '/' . md5 ($key));
@@ -148,9 +136,7 @@ class Cache {
 		chmod ($this->dir . '/' . md5 ($key), 0777);
 		return $val;
 	}
-	/**
-	 * Emulates `Memcache::decrement`.
-	 */
+
 	public function decrement ($key, $value = 1) {
 		if (file_exists ($this->dir . '/' . md5 ($key))) {
 			$val = file_get_contents ($this->dir . '/' . md5 ($key));
@@ -164,9 +150,7 @@ class Cache {
 		chmod ($this->dir . '/' . md5 ($key), 0777);
 		return $val;
 	}
-	/**
-	 * Emulates `Memcache::flush`.
-	 */
+
 	public function flush () {
 		$files = glob ($this->dir . '/{,.}*', GLOB_BRACE);
 		foreach ($files as $file) {
@@ -178,9 +162,7 @@ class Cache {
 		}
 		return true;
 	}
-	/**
-	 * Emulates `Memcache::delete`.
-	 */
+
 	public function delete ($key) {
 		$file = $this->dir . '/' . md5 ($key);
 		if (file_exists ($file)) {

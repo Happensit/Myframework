@@ -6,11 +6,11 @@
  * Time: 16:36
  */
 
-class About extends Controller{
+class AboutController extends Controller{
 
-    public function index(){
+    public function actionIndex(){
         $template = $this->loadView('about_view');
-        $template->set('content', "Тут какой-то контент");
+        $template->set('content', "Тут текст \"О нас \" ");
         $template->meta('keywords', "keywords content");
         $template->meta('description', "Description content");
         $template->render();

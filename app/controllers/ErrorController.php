@@ -6,9 +6,9 @@
  * Time: 14:28
  */
 
-class Error extends Controller {
+class ErrorController extends Controller {
 
-    function index(){
+    function actionIndex(){
         $this->error404();
     }
 
