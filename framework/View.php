@@ -41,30 +41,28 @@ class View {
     }
 
     public function render() {
-        $start = microtime(true);
+//        $start = microtime(true);
 //        $cache = new Cache();
 //        $key = md5(reset($this->pageVars));
 //        $data = $cache->get($key);
-        $data = '';
+//        $data = '';
 
-        if(empty($data)){
+//        if(empty($data)){
+            ob_start();
+            ob_implicit_flush(false);
             extract($this->pageVars);
             extract($this->assets);
             //extract($this->meta);
-            ob_start();
             include($this->template);
-            $data = ob_get_clean();
+            return ob_get_clean();
 
             //$cache->add($key, $data, 0, 360);
-        }
+//        }
 
-        $time = microtime(true) - $start;
+//        $time = microtime(true) - $start;
         //$data .= "<!--Скрипт выполнялся за " . $time .'-->';
-        $data .= "Скрипт выполнялся за " . $time .'';
 
         //$cache->flush();
-
-        print $data;
     }
 
 
